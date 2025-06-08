@@ -1,0 +1,103 @@
+version: '3.5'
+
+services:
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: milvus-etcd
+    environment:
+      - ETCD_NAME=milvus-etcd
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+    volumes:
+      - etcd_data:/etcd
+    ports:
+      - "2379:2379"
+    command:
+      - etcd
+      - -advertise-client-urls
+      - http://milvus-etcd:2379
+      - -listen-client-urls
+      - http://0.0.0.0:2379
+      - -listen-peer-urls
+      - http://0.0.0.0:2380
+      - -initial-advertise-peer-urls
+      - http://milvus-etcd:2380
+      - -initial-cluster-token
+      - etcd-cluster
+      - -initial-cluster
+      - milvus-etcd=http://milvus-etcd:2380
+      - -initial-cluster-state
+      - new
+
+
+
+  minio:
+    image: minio/minio:RELEASE.2023-01-12T02-06-16Z
+    container_name: milvus-minio
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    volumes:
+      - minio_data:/minio_data
+    command: server /minio_data
+    ports:
+      - "9000:9000"
+
+  pulsar:
+    image: apachepulsar/pulsar:2.10.0
+    container_name: milvus-pulsar
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+
+  milvus:
+    image: milvusdb/milvus:v2.2.11
+    container_name: milvus-standalone
+    command: ["milvus", "run", "standalone"]
+    depends_on:
+      - etcd
+      - minio
+      - pulsar
+    environment:
+      ETCD_ENDPOINTS: milvus-etcd:2379
+      MINIO_ADDRESS: milvus-minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      PULSAR_ADDRESS: milvus-pulsar:6650
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    volumes:
+      - milvus_data:/var/lib/milvus
+  
+  attu:
+    container_name: attu
+    image: zilliz/attu:v2.2.8
+    environment:
+      MILVUS_URL: milvus-standalone:19530
+    ports:
+      - "8000:3000"
+    depends_on:
+      - milvus
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+volumes:
+  etcd_data:
+  minio_data:
+  milvus_data:
