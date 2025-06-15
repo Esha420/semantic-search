@@ -1,15 +1,20 @@
 import streamlit as st
 import requests
 
-st.title("🔍 Semantic Search UI")
+st.title("🔍 eSewa AI Search")
 
 query = st.text_input("Enter your search query:")
 
 if st.button("Search") and query:
-    response = requests.get("http://localhost:8000/search", params={"query": query})
-    results = response.json()
-
-    st.subheader("Results:")
-    for res in results:
-        st.markdown(f"**Score:** {res['score']:.4f}")
-        st.markdown(f"```{res['text']}```")
+    with st.spinner("Searching..."):
+        try:
+            response = requests.get("http://localhost:8001/search", params={"q": query})
+            results = response.json().get("results", [])
+            if results:
+                st.success(f"Top {len(results)} results:")
+                for res in results:
+                    st.json(res)
+            else:
+                st.warning("No results found.")
+        except Exception as e:
+            st.error(f"Error: {e}")
