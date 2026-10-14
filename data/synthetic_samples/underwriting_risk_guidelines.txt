@@ -1,0 +1,16 @@
+# VERISK UNDERWRITING RISK EVALUATION STANDARDS
+Document Code: UWR-STD-2026-V3
+Classification: Internal Enterprise Standard
+
+## 1. ROOF CONDITION AND AGE DEPRECIATION
+1.1 Maximum Eligible Age: Commercial roofs constructed with architectural shingles or modified bitumen exceeding 20 years of age are ineligible for Replacement Cost Value (RCV) settlement. Policies for structures with roofs over 20 years must carry an Actual Cash Value (ACV) roof schedule endorsement.
+1.2 Hail-Resistant Rating: Structures equipped with UL 2218 Class 4 impact-resistant roofing qualify for a 12% premium credit on the windstorm hazard premium.
+1.3 Mandatory Pre-Bind Roof Inspection: Any commercial property with square footage exceeding 25,000 square feet or insured valuation over $2,000,000 requires a verified aerial imagery or drone inspection completed within 45 days prior to policy binding.
+
+## 2. FLOOD RISK ASSESSMENT AND ELEVATION STANDARDS
+2.1 FEMA Special Flood Hazard Areas (SFHA): Properties located in FEMA Zones A, AE, V, or VE cannot be bound for standard flood coverage without a verified Elevation Certificate indicating the lowest finished floor is at least 1.5 feet above the Base Flood Elevation (BFE).
+2.2 Non-Standard Surcharge: Commercial buildings in 500-year flood zones (Zone X-Shaded) with subterranean basements are subject to a mandatory $25,000 baseline water damage deductible.
+
+## 3. FIRE PROTECTION AND HYDRANT DISTANCE
+3.1 Public Protection Classification (PPC): Properties located in ISO PPC Protection Classes 9 or 10 are designated as high wildfire/fire exposure and require automated chemical fire suppression systems in kitchen and server rooms.
+3.2 Water Supply Requirements: The primary building perimeter must be situated within 1,000 linear feet of a municipal fire hydrant delivering a minimum flow rate of 1,000 gallons per minute (GPM) for at least two hours.
